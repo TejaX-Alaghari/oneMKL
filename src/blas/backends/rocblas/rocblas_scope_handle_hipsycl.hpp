@@ -18,8 +18,8 @@
 *  limitations under the License.
 *
 **************************************************************************/
-#ifndef _ROCBLAS_SCOPED_HANDLE_HPP_
-#define _ROCBLAS_SCOPED_HANDLE_HPP_
+#ifndef ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP
+#define ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP
 #if __has_include(<sycl/sycl.hpp>)
 #include <sycl/sycl.hpp>
 #else
@@ -63,4 +63,4 @@ public:
 } // namespace blas
 } // namespace mkl
 } // namespace oneapi
-#endif //_ROCBLAS_SCOPED_HANDLE_HPP_
+#endif //ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP

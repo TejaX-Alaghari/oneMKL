@@ -30,10 +30,12 @@
 #include "oneapi/mkl/types.hpp"
 #ifndef __HIPSYCL__
 #include "rocblas_scope_handle.hpp"
-#include <CL/sycl/detail/pi.hpp>
+#include <sycl/detail/pi.hpp>
 #else
 #include "rocblas_scope_handle_hipsycl.hpp"
-
+namespace sycl {
+using interop_handler = sycl::interop_handle;
+}
 #endif
 namespace oneapi {
 namespace mkl {

@@ -1,7 +1,7 @@
 #ifndef _MKL_BLAS_CUBLAS_TASK_HPP_
 #define _MKL_BLAS_CUBLAS_TASK_HPP_
 #include <cublas_v2.h>
-#include <cuda.h>
+//#include <cuda.h>
 #include <complex>
 #if __has_include(<sycl/sycl.hpp>)
 #include <sycl/sycl.hpp>
@@ -11,7 +11,7 @@
 #include "oneapi/mkl/types.hpp"
 #ifndef __HIPSYCL__
 #include "cublas_scope_handle.hpp"
-#include <CL/sycl/detail/pi.hpp>
+#include <sycl/detail/pi.hpp>
 #else
 #include "cublas_scope_handle_hipsycl.hpp"
 namespace sycl {

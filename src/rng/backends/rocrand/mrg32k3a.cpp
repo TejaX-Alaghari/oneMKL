@@ -64,7 +64,7 @@
 #include <CL/sycl.hpp>
 #endif
 #ifndef __HIPSYCL__
-#include <CL/sycl/backend/cuda.hpp>
+#include <sycl/backend/cuda.hpp>
 #endif
 #include <iostream>
 

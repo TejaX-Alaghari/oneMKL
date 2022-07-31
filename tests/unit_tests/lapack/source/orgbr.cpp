@@ -20,7 +20,11 @@
 #include <complex>
 #include <vector>
 
+#if __has_include(<sycl/sycl.hpp>)
+#include <sycl/sycl.hpp>
+#else
 #include <CL/sycl.hpp>
+#endif
 
 #include "oneapi/mkl.hpp"
 #include "lapack_common.hpp"
@@ -169,8 +173,8 @@ bool usm_dependency(const sycl::device& dev, oneapi::mkl::generate vect, int64_t
                                        scratchpad_size, std::vector<sycl::event>{ in_event });
 #else
         sycl::event func_event;
-        TEST_RUN_CT_SELECT(queue, sycl::event func_event = oneapi::mkl::lapack::orgbr, vect, m, n,
-                           k, A_dev, lda, tau_dev, scratchpad_dev, scratchpad_size,
+        TEST_RUN_CT_SELECT(queue, func_event = oneapi::mkl::lapack::orgbr, vect, m, n, k, A_dev,
+                           lda, tau_dev, scratchpad_dev, scratchpad_size,
                            std::vector<sycl::event>{ in_event });
 #endif
         result = check_dependency(queue, in_event, func_event);

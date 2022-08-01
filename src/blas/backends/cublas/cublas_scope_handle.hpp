@@ -18,10 +18,19 @@
 **************************************************************************/
 #ifndef _CUBLAS_SCOPED_HANDLE_HPP_
 #define _CUBLAS_SCOPED_HANDLE_HPP_
+#if __has_include(<sycl/sycl.hpp>)
+#include <sycl/sycl.hpp>
+#include <sycl/backend/cuda.hpp>
+#include <sycl/context.hpp>
+#include <sycl/detail/pi.hpp>
+#include <sycl/detail/common.hpp>
+#else
 #include <CL/sycl.hpp>
 #include <CL/sycl/backend/cuda.hpp>
 #include <CL/sycl/context.hpp>
 #include <CL/sycl/detail/pi.hpp>
+#include <CL/sycl/detail/common.hpp>
+#endif
 #include <atomic>
 #include <memory>
 #include <thread>
@@ -74,12 +83,12 @@ public:
 
     ~CublasScopedContextHandler() noexcept(false);
     /**
-   * @brief get_handle: creates the handle by implicitly impose the advice
-   * given by nvidia for creating a cublas_handle. (e.g. one cuStream per device
-   * per thread).
-   * @param queue sycl queue.
-   * @return cublasHandle_t a handle to construct cublas routines
-   */
+     * @brief get_handle: creates the handle by implicitly impose the advice
+     * given by nvidia for creating a cublas_handle. (e.g. one cuStream per device
+     * per thread).
+     * @param queue sycl queue.
+     * @return cublasHandle_t a handle to construct cublas routines
+     */
     cublasHandle_t get_handle(const sycl::queue &queue);
     // This is a work-around function for reinterpret_casting the memory. This
     // will be fixed when SYCL-2020 has been implemented for Pi backend.

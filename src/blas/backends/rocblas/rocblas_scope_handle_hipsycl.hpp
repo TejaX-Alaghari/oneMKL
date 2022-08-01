@@ -18,9 +18,13 @@
 *  limitations under the License.
 *
 **************************************************************************/
-#ifndef _ROCBLAS_SCOPED_HANDLE_HPP_
-#define _ROCBLAS_SCOPED_HANDLE_HPP_
+#ifndef ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP
+#define ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP
+#if __has_include(<sycl/sycl.hpp>)
+#include <sycl/sycl.hpp>
+#else
 #include <CL/sycl.hpp>
+#endif
 #include <memory>
 #include <thread>
 #include <unordered_map>
@@ -37,21 +41,21 @@ struct rocblas_handle_container {
 };
 
 class RocblasScopedContextHandler {
-    cl::sycl::interop_handle interop_h;
+    sycl::interop_handle interop_h;
     static thread_local rocblas_handle_container handle_helper;
-    cl::sycl::context get_context(const cl::sycl::queue &queue);
-    hipStream_t get_stream(const cl::sycl::queue &queue);
+    sycl::context get_context(const sycl::queue &queue);
+    hipStream_t get_stream(const sycl::queue &queue);
 
 public:
-    RocblasScopedContextHandler(cl::sycl::queue queue, cl::sycl::interop_handle &ih);
+    RocblasScopedContextHandler(sycl::queue queue, sycl::interop_handle &ih);
 
-    rocblas_handle get_handle(const cl::sycl::queue &queue);
+    rocblas_handle get_handle(const sycl::queue &queue);
 
     // This is a work-around function for reinterpret_casting the memory. This
     // will be fixed when SYCL-2020 has been implemented for Pi backend.
     template <typename T, typename U>
     inline T get_mem(U acc) {
-        return reinterpret_cast<T>(interop_h.get_native_mem<cl::sycl::backend::hip>(acc));
+        return reinterpret_cast<T>(interop_h.get_native_mem<sycl::backend::hip>(acc));
     }
 };
 
@@ -59,4 +63,4 @@ public:
 } // namespace blas
 } // namespace mkl
 } // namespace oneapi
-#endif //_ROCBLAS_SCOPED_HANDLE_HPP_
+#endif //ROCBLAS_SCOPED_HANDLE_HIPSYCL_HPP

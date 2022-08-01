@@ -56,8 +56,12 @@
  * so.
  ******************************************************************************/
 
+#if __has_include(<sycl/sycl.hpp>)
+#include <sycl/sycl.hpp>
+#else
 #include <CL/sycl.hpp>
-#include <CL/sycl/backend/cuda.hpp>
+#endif
+#include <sycl/backend/cuda.hpp>
 #include <iostream>
 
 #include "curand_helper.hpp"

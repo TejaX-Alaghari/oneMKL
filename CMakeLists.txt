@@ -52,11 +52,15 @@ option(ENABLE_CUSOLVER_BACKEND "" OFF)
 
 option(ENABLE_ROCBLAS_BACKEND "" OFF)
 option(ENABLE_CURAND_BACKEND "" OFF)
+option(ENABLE_ROCRAND_BACKEND "" OFF)
 option(ENABLE_NETLIB_BACKEND "" OFF)
 set(ONEMKL_SYCL_IMPLEMENTATION "dpc++" CACHE STRING "Name of the SYCL compiler")
 
 ## Testing
 option(BUILD_FUNCTIONAL_TESTS "" ON)
+
+## Examples
+option(BUILD_EXAMPLES "" ON)
 
 ## Documentation
 option(BUILD_DOC "" OFF)
@@ -142,6 +146,10 @@ if(WIN32 AND ONEMKL_SYCL_IMPLEMENTATION STREQUAL "dpc++")
   set(CMAKE_CXX_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> -fsycl /nologo <DEFINES> <INCLUDES> /EHsc <FLAGS> /Fo<OBJECT> -c <SOURCE>")
   set(CMAKE_CXX_CREATE_STATIC_LIBRARY "lib /nologo <OBJECTS> /out:<TARGET>")
   set(CMAKE_CXX_LINK_EXECUTABLE "<CMAKE_CXX_COMPILER> -fsycl /nologo <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+  find_library(MKL_SYCL_LIB NAMES mkl_sycl
+    HINTS $ENV{MKLROOT} ${MKL_ROOT}
+    PATH_SUFFIXES lib/intel64)
+  set(CMAKE_CXX_CREATE_SHARED_LIBRARY "<CMAKE_CXX_COMPILER> -fsycl /nologo <OBJECTS> ${MKL_SYCL_LIB} /link /out:<TARGET> /implib:<TARGET_IMPLIB> /pdb:<TARGET_PDB> /dll /version:<TARGET_VERSION_MAJOR>.<TARGET_VERSION_MINOR> <LINK_FLAGS> <LINK_LIBRARIES>")
 endif()
 
 # Temporary disable sycl 2020 deprecations warnings for cuBLAS, rocBLAS and cuSOLVER
@@ -211,9 +219,17 @@ endif()
 add_subdirectory(src bin)
 
 # Functional Tests
-if(BUILD_FUNCTIONAL_TESTS)
+if(BUILD_FUNCTIONAL_TESTS OR BUILD_EXAMPLES)
   enable_testing()
+endif()
+
+if(BUILD_FUNCTIONAL_TESTS)
   add_subdirectory(tests)
+endif()
+
+# Examples
+if (BUILD_EXAMPLES)
+  add_subdirectory(examples)
 endif()
 
 if(BUILD_DOC)

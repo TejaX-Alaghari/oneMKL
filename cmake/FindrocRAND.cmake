@@ -104,7 +104,7 @@ find_package_handle_standard_args(rocRAND
 if(NOT TARGET ONEMKL::rocRAND::rocRAND)
   add_library(ONEMKL::rocRAND::rocRAND SHARED IMPORTED)
   set_target_properties(ONEMKL::rocRAND::rocRAND PROPERTIES
-      IMPORTED_LOCATION "${HIP_PATH}/../rocrand/lib/librocrand.so"
+      IMPORTED_LOCATION "${HIP_PATH}/../lib/librocrand.so"
       INTERFACE_INCLUDE_DIRECTORIES "${rocrand_INCLUDE_DIR};${HIP_INCLUDE_DIRS};"
       INTERFACE_LINK_LIBRARIES "Threads::Threads;${rocrand_LIBRARIES};"
   )
